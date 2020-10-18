@@ -1,4 +1,5 @@
 //im only generating the model of the scheme not actually ussing information
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -35,3 +36,6 @@ const DoctorsSchema = new Schema({
         required: true
     },
 });
+const doctors = mongoose.model('doctors', DoctorsSchema);
+
+module.exports = doctors;

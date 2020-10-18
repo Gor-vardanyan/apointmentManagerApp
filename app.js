@@ -2,10 +2,21 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const db = require('./db/db');
-const db = require('./modules/clients');
-const db = require('./modules/doctors');
-const db = require('./modules/dates');
+require('./db/db');
+
+app.use(express.json());
+
+
+const doctorsController = require('./controllers/doctorsController');
+const datesController = require('./controllers/datesController');
+const {showClients} = require('./controllers/clientsController');
+const {registerClinets} = require('./controllers/clientsController');
+const {deleteClient} = require('./controllers/clientsController');
+
+
+app.get('/client/showAll', showClients);
+app.post( '/client/registerClients', registerClinets);
+app.get( '/client/delete', deleteClient);
 
 PORT = 3000;
 
