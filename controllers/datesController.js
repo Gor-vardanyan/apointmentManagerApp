@@ -1,1 +1,1 @@
-// campos del modelo date dateId, clientID, doctorID, date, status, comments
+// camps of model modelo date dateId, clientID, doctorID, date, status, comments

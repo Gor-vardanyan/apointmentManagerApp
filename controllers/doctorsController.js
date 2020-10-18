@@ -1,1 +1,1 @@
-// campos del modelo doctor doctorID, dni, name, lastname, secondlastname, email, password, phone
+// camps of model doctor doctorID, dni, name, lastname, secondlastname, email, password, phone

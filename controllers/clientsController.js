@@ -1,1 +1,1 @@
-//campos del modelo client clientID, dni, name, email, password, phone, date, historic
+// camps of model client clientID, dni, name, email, password, phone, date, historic
