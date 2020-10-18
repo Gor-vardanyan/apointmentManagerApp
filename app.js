@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const db = require('./db/db');
+const db = require('./modules/clients');
+const db = require('./modules/doctors');
+const db = require('./modules/dates');
+
 PORT = 3000;
 
 //el json lo parseamos mediante express para su uso

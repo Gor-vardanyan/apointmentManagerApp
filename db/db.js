@@ -6,4 +6,4 @@ mongoose.connect(proces.env.uri, {
   useCreateIndex: true
 })
 .then(()=>{ console.log('conected to data base')})
-.catch(()=>{ console.error('there was a problem connecting to database')});
+.catch((error)=>{ console.error('there was a problem connecting to database' + error)});
