@@ -1,0 +1,1 @@
+// campos del modelo doctor doctorID, dni, name, lastname, secondlastname, email, password, phone
