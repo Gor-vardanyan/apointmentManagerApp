@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 require('./db/db');
+const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 

@@ -46,7 +46,7 @@ const deleteClient = async (req, res) => {
     let dni = req.body.dni;
 
     ClientsModule.findOneAndDelete({ dni })
-    .then ( (deleted) => {
+    .then (deleted => {
 		
 		if (deleted) {
 			res.send({
@@ -62,10 +62,40 @@ const deleteClient = async (req, res) => {
 	}).catch( (err) => {
 		console.log( err );
 	});
+};
+
+const loginUser = async (req, res) => {
+
+    let clientfound = await ClientsModule.findOne({
+        email: req.body.email
+    });
+
+    if(!usuarioEncontrado){
+        res.send({
+            message: "No existe el usuario"
+        })
+    }else{
+
+        let passwordOk = await bcrypt.compare(req.body.password, clientfound.password);
+
+        if(passwordOk){
+            res.send({
+                name: clientfound.username,
+                email: clientfound.email
+            })
+        }else{
+            res.send({
+                message: "Credenciales incorrectas"
+            })
+        }
+        
+    }
+
 }
 
 module.exports = {
     showClients,
     registerClinets,
-    deleteClient
+    deleteClient,
+    loginUser
 };
