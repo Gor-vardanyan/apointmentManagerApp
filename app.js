@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-
+const db = require('./db/db');
 PORT = 3000;
 
 //el json lo parseamos mediante express para su uso
