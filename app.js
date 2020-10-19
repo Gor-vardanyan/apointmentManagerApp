@@ -34,7 +34,7 @@ app.post('/dates/createDate', auth ,createDate)
 app.get('/dates/removeDate', auth ,removeDate)
 
 
-PORT = 3000;
+PORT = process.env.PORT || 3000;
 
 //el json lo parseamos mediante express para su uso
 app.use(express.json());
