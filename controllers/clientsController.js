@@ -1,22 +1,25 @@
 // camps of model client clientID, dni, name, email, password, phone, date, historic
-
-const ClientsModule = require('../modules/clients');
+const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const { exists, findOneAndUpdate } = require("../modules/clients");
+const clientsModule = require('../modules/clients');
 
 const  showClients = (req, res) => {
-     ClientsModule.find({})
+     clientsModule.find({})
      .then(findall => {
          res.send(findall)})
      .catch(error=>{console.log(error)});
 };
 
-const registerClinets = async (req, res) => {
+const registerClients = async (req, res) => {
     let bodyData = req.body;
+    let hashed_password = await bcrypt.hash(bodyData.password, 10);
     try {
-        const clients = await new ClientsModule({
+        const clients = await new clientsModule({
             dni: bodyData.dni,
             name: bodyData.name,
 		    email: bodyData.email,
-            password: bodyData.password,
+            password: hashed_password,
             phone: bodyData.phone
         }).save();
 
@@ -42,10 +45,8 @@ const registerClinets = async (req, res) => {
 };
 
 const deleteClient = async (req, res) => {
-    
-    let dni = req.body.dni;
-
-    ClientsModule.findOneAndDelete({ dni })
+    let dni = req.client_dni;
+    clientsModule.findOneAndDelete({ dni })
     .then (deleted => {
 		
 		if (deleted) {
@@ -65,23 +66,26 @@ const deleteClient = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+    let query = {email: req.body.email}
+    let client = await clientsModule.findOne(query);
 
-    let clientfound = await ClientsModule.findOne({
-        email: req.body.email
-    });
-
-    if(!usuarioEncontrado){
+    if(!client){
         res.send({
             message: "No existe el usuario"
-        })
+        });
     }else{
-
-        let passwordOk = await bcrypt.compare(req.body.password, clientfound.password);
-
+        let passwordOk = await bcrypt.compare(req.body.password, client.password);
         if(passwordOk){
+            if(!client.token){ // si no existe el campo token (o esta vacio) se asignará
+                let token = jwt.sign(client.dni, process.env.jwt_encoder); // firma el pasword y genera el token con el texto del env
+                client.token = token; // pasa la firma del password al campo token
+                await clientsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
+            }
+            
             res.send({
-                name: clientfound.username,
-                email: clientfound.email
+                token: client.token,
+                name: client.username,
+                email: client.email
             })
         }else{
             res.send({
@@ -93,9 +97,16 @@ const loginUser = async (req, res) => {
 
 }
 
+const logOut = async (req, res) =>{
+    let dni = req.client_dni;
+    await clientsModule.findOneAndUpdate({dni},{token:null});
+    res.send('Logged out');
+}
+
 module.exports = {
     showClients,
-    registerClinets,
+    registerClients,
     deleteClient,
-    loginUser
+    loginUser,
+    logOut
 };

@@ -6,6 +6,10 @@ const ObjectId = Schema.ObjectId;
  
 const DoctorsSchema = new Schema({
     doctorID: ObjectId,
+    token:{
+        type: String,
+        unique: true
+    },
     dni: {
         type: String,
         unique: true,

@@ -3,22 +3,36 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 require('./db/db');
-const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
+const {auth} = require('./middleware/auth')
+
 
 app.use(express.json());
 
-
-const doctorsController = require('./controllers/doctorsController');
-const datesController = require('./controllers/datesController');
 const {showClients} = require('./controllers/clientsController');
-const {registerClinets} = require('./controllers/clientsController');
+const {registerClients} = require('./controllers/clientsController');
 const {deleteClient} = require('./controllers/clientsController');
+const {loginUser} = require('./controllers/clientsController');
+const {logOut} = require('./controllers/clientsController');
+
+const {registerDoctor} = require('./controllers/doctorsController');
+
+const {createDate} = require('./controllers/datesController');
+const {showDates} = require('./controllers/datesController');
+const {removeDate} = require('./controllers/datesController');
 
 
-app.get('/client/showAll', showClients);
-app.post( '/client/registerClients', registerClinets);
-app.get( '/client/delete', deleteClient);
+app.get('/client/showAll',auth, showClients);
+app.post( '/client/registerClients', registerClients);
+app.get( '/client/delete', auth, deleteClient);
+app.get( '/client/loginUser', loginUser);
+app.get( '/client/logOut', auth,logOut);
+
+app.post( '/doctor/registerDoctor', registerDoctor);
+
+app.get('/dates/showAll',showDates);
+app.post('/dates/createDate', auth ,createDate)
+app.get('/dates/removeDate', auth ,removeDate)
+
 
 PORT = 3000;
 
