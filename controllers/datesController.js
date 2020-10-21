@@ -3,10 +3,19 @@ const datesModel = require('../modules/dates');
 const doctorsModel = require('../modules/doctors');
 const clientsModule = require('../modules/clients');
 
+/*
 const showDates = async (req,res)=>{
     const alldates = await datesModel.find({});
     res.send(alldates)
 }
+*/
+
+const showDates = async (req,res)=>{
+    try {
+         const alldates = await datesModel.find({});
+         res.send(alldates)
+ } catch (error) {console.log(error)};
+ };
 
 const createDate = async (req,res)=>{
     let client_dni = req.client_dni; // dato cargado de auth

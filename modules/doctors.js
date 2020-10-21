@@ -40,6 +40,6 @@ const DoctorsSchema = new Schema({
         required: true
     },
 });
-const doctors = mongoose.model('doctors', DoctorsSchema);
+const DoctorsModule = mongoose.model('doctors', DoctorsSchema);
 
-module.exports = doctors;
+module.exports = DoctorsModule;

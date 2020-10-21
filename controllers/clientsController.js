@@ -3,12 +3,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const { exists, findOneAndUpdate } = require("../modules/clients");
 const clientsModule = require('../modules/clients');
-
+/*
 const  showClients = (req, res) => {
      clientsModule.find({})
      .then(findall => {
          res.send(findall)})
      .catch(error=>{console.log(error)});
+};
+*/
+const showClients = async (req, res) => {
+    try {
+        const alldates = await doctorsModel.find({});
+        res.send(alldates)
+} catch (error) {console.log(error)}
 };
 
 const registerClients = async (req, res) => {
@@ -65,7 +72,7 @@ const deleteClient = async (req, res) => {
 	});
 };
 
-const loginUser = async (req, res) => {
+const loginClient = async (req, res) => {
     let query = {email: req.body.email}
     let client = await clientsModule.findOne(query);
 
@@ -84,7 +91,7 @@ const loginUser = async (req, res) => {
             
             res.send({
                 token: client.token,
-                name: client.username,
+                name: client.name,
                 email: client.email
             })
         }else{
@@ -107,6 +114,6 @@ module.exports = {
     showClients,
     registerClients,
     deleteClient,
-    loginUser,
+    loginClient,
     logOut
 };
