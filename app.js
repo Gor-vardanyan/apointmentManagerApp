@@ -67,7 +67,5 @@ app.get( '/admin/logoutAdmin', logOutAdmin);
     //////////////////
 
 
-
-
 //app listen es un objeto de funcion callback de puerto sin paramteros que devuelve el console log con su posición en servidor
 app.listen( PORT, ()=> console.log("el servidor esta en el puerto " + PORT ));
