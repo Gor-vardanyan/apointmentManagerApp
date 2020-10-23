@@ -1,24 +1,24 @@
 const jwt = require('jsonwebtoken');
-const SystemModule = require('../modules/system');
+const DoctorsModule = require('../modules/doctors');
 
-function authadmin(req, res, next) {
+function authdoctor(req, res, next) {
   // Gather the jwt access token from the request header
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   if (token == null) return res.sendStatus(401) // if there isn't any token
 
-  jwt.verify(token, process.env.jwt_admin, async (err, token) => {
+  jwt.verify(token, process.env.jwt_doctorToken, async (err, token) => {
     if (err) return res.sendStatus(403)
     console.log(`token es : ${token}`);
-    let admin =  await SystemModule.findOne({email:token});
-    if(admin === null || admin.token === null){
+    let doctor =  await DoctorsModule.findOne({email:token});
+    if(doctor === null || doctor.token === null){
       res.send('El Token no es valido');
     }else{
-      req.admin_email = admin.email;
+      req.doctor_email = doctor.email;
       next()
     }
     
   })
 }
 
-module.exports = {authadmin}
+module.exports = {authdoctor}

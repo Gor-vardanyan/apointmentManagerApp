@@ -12,6 +12,14 @@ const showDoctors = async (req, res) => {
 } catch (error) {console.log(error)};
 };
 
+const showDatesDoctor = async (req, res) => {
+    let dni = req.client_dni;
+    try {
+        const DatesDoctor = await DoctorsModule.find({ dni });
+        res.send(DatesDoctor)
+} catch (error) {console.log(error)}
+};
+
 const registerDoctor = async (req, res) => {
     let bodyData = req.body;
     let hashed_password = await bcrypt.hash(bodyData.password, 10);
@@ -53,7 +61,69 @@ const registerDoctor = async (req, res) => {
     
 };
 
+const logInDoctor = async (req, res) => {
+    let query = {email: req.body.email}
+    let doctor = await DoctorsModule.findOne(query);
+
+    if(!doctor){
+        res.send({
+            message: "No existe el usuario"
+        });
+    }else{
+        let passwordOk = await bcrypt.compare(req.body.password, doctor.password);
+        if(passwordOk){
+            //here we create the token or asign it
+            if(!doctor.token){ 
+                let token = jwt.sign(doctor.dni, process.env.jwt_doctorToken); // firma el pasword y genera el token con el texto del env
+                doctor.token = token; // pasa la firma del password al campo token
+                await DoctorsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion doctor
+            }
+            
+            res.send({
+                token: doctor.token,
+                name: doctor.name,
+                email: doctor.email
+            })
+        }else{
+            res.send({
+                message: "Credenciales incorrectas"
+            })
+        }   
+    }
+};
+
+const logOutDoctor = async (req, res) =>{
+    let dni = req.doctor_dni;
+    await DoctorsModule.findOneAndUpdate({dni},{token:null});
+    res.send('Logged out');
+};
+
+const deleteDoctor = async (req, res) => {
+    let dni = req.doctor_dni;
+    DoctorsModule.findOneAndDelete({ dni })
+    .then (deleted => {
+		
+		if (deleted) {
+			res.send({
+				message: `Client with DNI ${deleted.dni} name: ${deleted.name} email: ${deleted.email} deleted`
+			});
+		} else {
+			res.status(404);
+			res.send({
+				error: `Didn't find client with DNI ${dni}.`
+			})
+		};
+		
+	}).catch( (err) => {
+		console.log( err );
+	});
+};
+
 module.exports = {
     registerDoctor,
-    showDoctors
+    showDoctors,
+    showDatesDoctor,
+    logInDoctor,
+    logOutDoctor,
+    deleteDoctor
 }
