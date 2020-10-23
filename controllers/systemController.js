@@ -3,12 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const { exists, findOneAndUpdate } = require("../modules/clients");
 const SystemModule = require('../modules/system');
-const clientsModule = require('../modules/clients');
-const doctorsModel = require('../modules/doctors');
-const datesModel = require('../modules/dates');
 
 
-const loginAdmin = async (req, res) => {
+const logInAdmin = async (req, res) => {
     let query = {email: req.body.email}
     let admin = await SystemModule.findOne(query);
 
@@ -45,6 +42,6 @@ const logOutAdmin = async (req, res) =>{
 }
 
 module.exports = {
-    loginAdmin,
+    logInAdmin,
     logOutAdmin
 };

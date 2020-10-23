@@ -14,7 +14,7 @@ function auth(req, res, next) {
     if(client === null || client.token === null){
       res.send('El Token no es valido');
     }else{
-      req.client_dni = client.dni;
+      req.client_dni = client.dni; //we create the camp client dni and nest it into req, also we define its content
       next()
     }
     

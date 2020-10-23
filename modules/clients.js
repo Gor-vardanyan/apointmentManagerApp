@@ -9,8 +9,7 @@ const ObjectId = Schema.ObjectId;
 const ClientsSchema = Schema({
     clientID: ObjectId,
     token:{
-        type: String,
-        unique: true
+        type: String
     },
     dni: {
         type: String,

@@ -1,7 +1,7 @@
 // camps of model client clientID, dni, name, email, password, phone, date, historic
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-const { exists, findOneAndUpdate } = require("../modules/clients");
+// const { exists, findOneAndUpdate } = require("../modules/clients");
 const clientsModule = require('../modules/clients');
 /*
 const  showClients = (req, res) => {
@@ -13,7 +13,7 @@ const  showClients = (req, res) => {
 */
 const showClients = async (req, res) => {
     try {
-        const alldates = await doctorsModel.find({});
+        const alldates = await clientsModule.find({});
         res.send(alldates)
 } catch (error) {console.log(error)}
 };
@@ -42,9 +42,11 @@ const registerClients = async (req, res) => {
 	} catch (err) {
         if (err.code === 11000) { // E11000 duplicate key error (unique true)
 			res.status(409); // conflict
-			res.send({
-				error: "Email already used."
+            console.log(err)
+            res.send({
+                error: "Email already used."
 			});
+
 		} else {
 			res.send(err);	
 		};
@@ -72,7 +74,7 @@ const deleteClient = async (req, res) => {
 	});
 };
 
-const loginClient = async (req, res) => {
+const logInClient = async (req, res) => {
     let query = {email: req.body.email}
     let client = await clientsModule.findOne(query);
 
@@ -104,7 +106,7 @@ const loginClient = async (req, res) => {
 
 }
 
-const logOut = async (req, res) =>{
+const logOutClient = async (req, res) =>{
     let dni = req.client_dni;
     await clientsModule.findOneAndUpdate({dni},{token:null});
     res.send('Logged out');
@@ -114,6 +116,6 @@ module.exports = {
     showClients,
     registerClients,
     deleteClient,
-    loginClient,
-    logOut
+    logInClient,
+    logOutClient
 };
