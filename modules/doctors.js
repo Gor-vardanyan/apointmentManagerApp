@@ -21,7 +21,6 @@ const DoctorsSchema = new Schema({
     },
     lastname: {
         type: String,
-        required: true
     },
     secondlastname: {
         type: String

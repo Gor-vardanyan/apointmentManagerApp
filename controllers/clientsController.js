@@ -2,10 +2,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 // const { exists, findOneAndUpdate } = require("../modules/clients");
-const clientsModule = require('../modules/clients');
+const ClientsModule = require('../modules/clients');
 /*
 const  showClients = (req, res) => {
-     clientsModule.find({})
+     ClientsModule.find({})
      .then(findall => {
          res.send(findall)})
      .catch(error=>{console.log(error)});
@@ -13,8 +13,16 @@ const  showClients = (req, res) => {
 */
 const showClients = async (req, res) => {
     try {
-        const alldates = await clientsModule.find({});
+        const alldates = await ClientsModule.find({});
         res.send(alldates)
+} catch (error) {console.log(error)}
+};
+
+const showDatesClient = async (req, res) => {
+    let dni = req.client_dni;
+    try {
+        const DatesClient = await ClientsModule.find({ dni });
+        res.send(DatesClient)
 } catch (error) {console.log(error)}
 };
 
@@ -22,7 +30,7 @@ const registerClients = async (req, res) => {
     let bodyData = req.body;
     let hashed_password = await bcrypt.hash(bodyData.password, 10);
     try {
-        const clients = await new clientsModule({
+        const clients = await new ClientsModule({
             dni: bodyData.dni,
             name: bodyData.name,
 		    email: bodyData.email,
@@ -55,7 +63,7 @@ const registerClients = async (req, res) => {
 
 const deleteClient = async (req, res) => {
     let dni = req.client_dni;
-    clientsModule.findOneAndDelete({ dni })
+    ClientsModule.findOneAndDelete({ dni })
     .then (deleted => {
 		
 		if (deleted) {
@@ -76,7 +84,7 @@ const deleteClient = async (req, res) => {
 
 const logInClient = async (req, res) => {
     let query = {email: req.body.email}
-    let client = await clientsModule.findOne(query);
+    let client = await ClientsModule.findOne(query);
 
     if(!client){
         res.send({
@@ -88,7 +96,7 @@ const logInClient = async (req, res) => {
             if(!client.token){ // si no existe el campo token (o esta vacio) se asignará
                 let token = jwt.sign(client.dni, process.env.jwt_encoder); // firma el pasword y genera el token con el texto del env
                 client.token = token; // pasa la firma del password al campo token
-                await clientsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
+                await ClientsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
             }
             
             res.send({
@@ -108,12 +116,13 @@ const logInClient = async (req, res) => {
 
 const logOutClient = async (req, res) =>{
     let dni = req.client_dni;
-    await clientsModule.findOneAndUpdate({dni},{token:null});
+    await ClientsModule.findOneAndUpdate({dni},{token:null});
     res.send('Logged out');
 }
 
 module.exports = {
     showClients,
+    showDatesClient,
     registerClients,
     deleteClient,
     logInClient,
