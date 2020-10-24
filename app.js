@@ -53,25 +53,25 @@ app.get('/client/dates',auth, showDatesClient)// searches in dates his id
 
     ////// CRUD Doctor //////
 app.get('/doctor/showAll', authadmin, showDoctors);//token from Admin required
-app.post( '/doctor/registerDoctor', registerDoctor); // token from Admin required
+app.post( '/doctor/registerDoctor', authadmin, registerDoctor); // token from Admin required
 app.get( '/doctor/loginDoctor', logInDoctor); //only asks for email and pasword
-app.get( '/doctor/logOut', authdoctor,logOutDoctor); //only needs to be loged
+app.get( '/doctor/logOut', authdoctor, logOutDoctor); //only needs to be loged
 app.get( '/doctor/delete', authadmin, deleteDoctor); // search through dni and deletes, requires token from Admin
 app.get('/doctor/dates',authdoctor, showDatesDoctor)// searches in dates his id    
     //////////////////
 
 
     ////// CRUD Dates //////
-app.get('/dates/showAll',showDates); //show dates of the doctor with it's token 
-app.post('/dates/createDate', auth ,createDate)//Client's date requires it's token
-app.get('/dates/removeDateClient', auth ,removeDateClient)//search through dni and deletes, requires token from Client
-app.get('/dates/removeDateDoctor', authdoctor ,removeDateDoctor)//search through dni and deletes, requires token from Client
-   
+app.get('/dates/showAll', auth, showDates);
+app.get('/dates/doctor/showAll', authdoctor, showDates); //show dates of the doctor with it's token 
+app.post('/dates/createDate', auth, createDate)// requires doctors name and the clients token
+app.get('/dates/removeDateClient', auth, removeDateClient)//search through dni and deletes, requires token from Client
+app.get('/dates/removeDateDoctor', authdoctor, removeDateDoctor)//search through dni and deletes, requires token from Client
     //////////////////
 
     ////// CRUD Admin //////
 app.get( '/admin/loginAdmin', logInAdmin);
-app.get( '/admin/logoutAdmin', logOutAdmin);
+app.get( '/admin/logoutAdmin', authadmin, logOutAdmin);
     //////////////////
 
 

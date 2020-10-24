@@ -2,6 +2,7 @@
 const DoctorsModel = require('../modules/doctors');
 const ClientsModule = require('../modules/clients');
 const DatesModel = require('../modules/dates');
+const { query } = require('express');
 
 /*
 const showDates = async (req,res)=>{
@@ -20,9 +21,8 @@ const showDates = async (req,res)=>{
 const createDate = async (req,res)=>{
     let client_dni = req.client_dni; // dato cargado de auth
     let bodyData = req.body; // datos traidos del body
-    
     let doctor = await DoctorsModel.findOne({dni:bodyData.doctor});
-    let client = await ClientsModule.findOne({dni:client_dni});    
+    let client = await ClientsModule.findOne({dni:client_dni});
     let coincidenceFound = await DatesModel.findOne({date:bodyData.date})
     console.log(client)
 
@@ -30,31 +30,36 @@ const createDate = async (req,res)=>{
         console.log("entre1")
        if(coincidenceFound !== null){
             res.send({
-                message:'Date is not available, plase try another'
-        });
-        }else if(client !== null){
-            console.log("entre2")
-
+                message:'This user already has a date, plase send an email for more informatión '
+        });}else if(client !== null){
+            let query = req.dni;
+            let doctorDni = await DoctorsModel.findOne({query});
+            let doctor_name1 = doctorDni.name;
+            let client_name1 = client.name;
             const dates = await new DatesModel({
-                //doctorID: doctor._id,
+                doctorID: doctorDni._id,
                 clientID: client._id,
                 date: bodyData.date,
                 status: true
             }).save();
-
+  
             res.send({
-                message: `Date created successfully for client ${client.dni} with doctor: ${doctor.name} ${doctor.lastname}.`
+                message: `Date created successfully for client ${client_name1} with doctor: ${doctor_name1}.`
             });
         }else{
+            let query = req.dni
+            let clientDni = await ClientsModule.findOne({query});
+            let doctor_name1 = clientDni.name;
+            let client_name1 = doctor.name;
             const dates = await new DatesModel({
                 doctorID: doctor._id,
-                //clientID: client._id,
+                clientID: clientDni._id,
                 date: bodyData.date,
                 status: true
             }).save();
 
             res.send({
-                message: `Date created successfully for client ${client.dni} with doctor: ${doctor.name} ${doctor.lastname}.`
+                message: `Date created successfully for client ${client_name1} with doctor: ${doctor_name1}.`
             });
         }       
     }
