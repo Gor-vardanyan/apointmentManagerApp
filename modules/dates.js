@@ -24,6 +24,6 @@ const DatesSchema = new Schema({
     },
     comments: String 
 });
-const dates = mongoose.model('dates', DatesSchema);
+const DatesModel = mongoose.model('dates', DatesSchema);
 
-module.exports = dates; 
+module.exports = DatesModel; 

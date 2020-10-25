@@ -7,8 +7,7 @@ const ObjectId = Schema.ObjectId;
 const DoctorsSchema = new Schema({
     doctorID: ObjectId,
     token:{
-        type: String,
-        unique: true
+        type: String
     },
     dni: {
         type: String,
@@ -20,8 +19,7 @@ const DoctorsSchema = new Schema({
         required: true
     },
     lastname: {
-        type: String,
-        required: true
+        type: String
     },
     secondlastname: {
         type: String
@@ -40,6 +38,6 @@ const DoctorsSchema = new Schema({
         required: true
     },
 });
-const doctors = mongoose.model('doctors', DoctorsSchema);
+const DoctorsModule = mongoose.model('doctors', DoctorsSchema);
 
-module.exports = doctors;
+module.exports = DoctorsModule;
