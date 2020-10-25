@@ -3,14 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 // const { exists, findOneAndUpdate } = require("../modules/clients");
 const ClientsModule = require('../modules/clients');
-/*
-const  showClients = (req, res) => {
-     ClientsModule.find({})
-     .then(findall => {
-         res.send(findall)})
-     .catch(error=>{console.log(error)});
-};
-*/
+
 const showClients = async (req, res) => {
     try {
         const alldates = await ClientsModule.find({});
