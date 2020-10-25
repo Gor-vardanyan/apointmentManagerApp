@@ -19,57 +19,42 @@ const showDates = async (req,res)=>{
  };
 
 const createDate = async (req,res)=>{
-    let client_dni = req.client_dni; // dato cargado de auth
-    let bodyData = req.body; // datos traidos del body
-    let doctor = await DoctorsModel.findOne({dni:bodyData.doctor});
-    let client = await ClientsModule.findOne({dni:client_dni});
-    let coincidenceFound = await DatesModel.findOne({date:bodyData.date})
-    console.log(client)
-
-    if( client !== null || doctor !== null ){
-        console.log("entre1")
-       if(coincidenceFound !== null){
-            res.send({
-                message:'This user already has a date, plase send an email for more informatión '
-        });}else if(client !== null){
-            let query = req.dni;
-            let doctorDni = await DoctorsModel.findOne({query});
-            let doctor_name1 = doctorDni.name;
-            let client_name1 = client.name;
-            const dates = await new DatesModel({
-                doctorID: doctorDni._id,
-                clientID: client._id,
-                date: bodyData.date,
-                status: true
-            }).save();
-  
-            res.send({
-                message: `Date created successfully for client ${client_name1} with doctor: ${doctor_name1}.`
-            });
-        }else{
-            let query = req.dni
-            let clientDni = await ClientsModule.findOne({query});
-            let doctor_name1 = clientDni.name;
-            let client_name1 = doctor.name;
-            const dates = await new DatesModel({
-                doctorID: doctor._id,
-                clientID: clientDni._id,
-                date: bodyData.date,
-                status: true
-            }).save();
-
-            res.send({
-                message: `Date created successfully for client ${client_name1} with doctor: ${doctor_name1}.`
-            });
-        }       
+    let doctor;
+    let client;
+    if(req.is_doctor){ //Doctor
+        doctor = await DoctorsModel.findOne({name:req.doctor_email});// dato cargado de auth
+        client = await ClientsModule.findOne({dni:req.body.dni});// datos traidos del body
+    }else{ //Client
+        doctor = await DoctorsModel.findOne({name:req.body.name});// datos traidos del body
+        client = await ClientsModule.findOne({dni:req.client_dni});// dato cargado de auth
     }
-    res.send('Couldnt\'t find either the client or the doctor');
+    if( client === null || doctor === null){
+        return res.send('Couldnt\'t find either the client or the doctor');
+    }
+    let coincidenceFound = await DatesModel.findOne({date:req.body.date, clientID: client._id})
+    if(coincidenceFound !== null){
+        return res.send({message:'This user already has a date, plase send an email for more informatión '});
+    }
+    const dates = await new DatesModel({
+        doctorID: doctor._id,
+        clientID: client._id,
+        date: req.body.date,
+        status: true
+    }).save();
+
+    res.send({
+        message: `Date created successfully for client ${client.name} with doctor: ${doctor.name}.`
+    });
+
 };
 
 const removeDateClient = async (req,res)=>{
-    let client_dni = req.client_dni; // take from auth
-    let client = await ClientsModule.findOne({dni:client_dni});
-
+    let client;
+    if(req.is_doctor){ //Doctor
+        client = await ClientsModule.findOne({dni:req.body.dni});// dato cargado de auth
+    }else{ //Client
+        client = await ClientsModule.findOne({dni:req.client_dni});// dato cargado de auth
+    }
     if( !(client === null) ){
         const date = await DatesModel.findOneAndDelete({
             clientID: client._id,
@@ -81,25 +66,9 @@ const removeDateClient = async (req,res)=>{
     res.send('Couldnt\'t find either the client');
 };
 
-const removeDateDoctor = async (req,res)=>{
-    let doctor_email = req.doctor_email; // take from auth
-    let doctor = await DoctorsModel.findOne({dni:doctor_email});// Select user from its dni and fix it in doctor
-
-    if( !(doctor === null) ){
-        const date = await DatesModel.findOneAndDelete({
-            doctorID: doctor._id,
-        })
-
-        res.send({
-            message: `Date deleted successfully for Doctor ${doctor.dni} in date: ${date.date}.`
-        });
-    }
-    res.send('Couldnt\'t find either the client');
-};
 
 module.exports = {
     showDates,
     createDate,
-    removeDateClient,
-    removeDateDoctor
+    removeDateClient
 }

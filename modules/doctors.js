@@ -7,8 +7,7 @@ const ObjectId = Schema.ObjectId;
 const DoctorsSchema = new Schema({
     doctorID: ObjectId,
     token:{
-        type: String,
-        unique: true
+        type: String
     },
     dni: {
         type: String,
@@ -20,7 +19,7 @@ const DoctorsSchema = new Schema({
         required: true
     },
     lastname: {
-        type: String,
+        type: String
     },
     secondlastname: {
         type: String

@@ -26,21 +26,14 @@ const showDatesDoctor = async (req, res) => {
 
 const registerDoctor = async (req, res) => {
     let admin_email = req.admin_email;
-    SystemModule;
-    let bodyDatadoctor = req.body;
+    var bodyDatadoctor = req.body;
     let hashed_password = await bcrypt.hash(bodyDatadoctor.password, 10);
-    let query = req.body.email;
-    let admin = DoctorsModule.findOne(query)
-    
+    let query = req.body;
+    let admin = await DoctorsModule.findOne({query})
 
         try {
-            console.log("enter1")
-
             if(admin_email !== null){
-                console.log("enter2")
-
-                if(admin !== null){
-
+                if(admin === null){
                     const doctors = await new DoctorsModule({
                         dni: bodyDatadoctor.dni,
                         name: bodyDatadoctor.name,
@@ -48,8 +41,6 @@ const registerDoctor = async (req, res) => {
                         password: hashed_password,
                         phone: bodyDatadoctor.phone
                     }).save();
-                    console.log("enter4")
-                    console.log(doctors)
 
                     res.send({
                         message: "Doctor added successfully.",
@@ -65,7 +56,7 @@ const registerDoctor = async (req, res) => {
             if (err.code === 11000) { // E11000 duplicate key error (unique true)
                 res.status(409); // conflict
                 res.send({
-                    error: "Email already used."
+                    error: err
                 });
             } else {
                 res.send(err);	
@@ -106,13 +97,13 @@ const logInDoctor = async (req, res) => {
 };
 
 const logOutDoctor = async (req, res) =>{
-    let dni = req.doctor_dni;
-    await DoctorsModule.findOneAndUpdate({dni},{token:null});
+    let email = req.doctor_email;
+    await DoctorsModule.findOneAndUpdate({email},{token: null});
     res.send('Logged out');
 };
 
 const deleteDoctor = async (req, res) => {
-    let dni = req.doctor_dni;
+    let email = req.doctor_email;
     DoctorsModule.findOneAndDelete({ dni })
     .then (deleted => {
 		

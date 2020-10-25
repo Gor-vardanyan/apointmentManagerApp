@@ -6,6 +6,8 @@ require('./db/db');
 const {auth} = require('./middleware/auth')
 const {authdoctor} = require('./middleware/authdoctor');
 const {authadmin} = require('./middleware/authadmin');
+const {tokenCheck} = require('./middleware/tokenchek');
+
 
 PORT = process.env.PORT || 3000;
 
@@ -34,7 +36,6 @@ const {showDatesDoctor} = require('./controllers/doctorsController');
 const {showDates} = require('./controllers/datesController');
 const {createDate} = require('./controllers/datesController');
 const {removeDateClient} = require('./controllers/datesController');
-const {removeDateDoctor} = require('./controllers/datesController');
     //////////////////
 
     ////// Routing Admin /////
@@ -54,24 +55,23 @@ app.get('/client/dates',auth, showDatesClient)// searches in dates his id
     ////// CRUD Doctor //////
 app.get('/doctor/showAll', authadmin, showDoctors);//token from Admin required
 app.post( '/doctor/registerDoctor', authadmin, registerDoctor); // token from Admin required
-app.get( '/doctor/loginDoctor', logInDoctor); //only asks for email and pasword
+app.get( '/doctor/logInDoctor', logInDoctor); //only asks for email and pasword
 app.get( '/doctor/logOut', authdoctor, logOutDoctor); //only needs to be loged
 app.get( '/doctor/delete', authadmin, deleteDoctor); // search through dni and deletes, requires token from Admin
 app.get('/doctor/dates',authdoctor, showDatesDoctor)// searches in dates his id    
     //////////////////
 
 
-    ////// CRUD Dates //////
+    ////// CRUD Dates ////// All worked fine
 app.get('/dates/showAll', auth, showDates);
 app.get('/dates/doctor/showAll', authdoctor, showDates); //show dates of the doctor with it's token 
-app.post('/dates/createDate', auth, createDate)// requires doctors name and the clients token
-app.get('/dates/removeDateClient', auth, removeDateClient)//search through dni and deletes, requires token from Client
-app.get('/dates/removeDateDoctor', authdoctor, removeDateDoctor)//search through dni and deletes, requires token from Client
+app.post('/dates/createDate', tokenCheck, createDate) // controles the token user (doctor/client) asks for doctors name and the clients token or the clients dni and doctors token
+app.get('/dates/removeDateClient', tokenCheck, removeDateClient) //if is doctor need dni of client, if it's client needs to be loged in for it's token
     //////////////////
 
-    ////// CRUD Admin //////
-app.get( '/admin/loginAdmin', logInAdmin);
-app.get( '/admin/logoutAdmin', authadmin, logOutAdmin);
+    ////// CRUD Admin ////// All worked fine
+app.get( '/admin/logInAdmin', logInAdmin);
+app.get( '/admin/logOutAdmin', authadmin, logOutAdmin);
     //////////////////
 
 
