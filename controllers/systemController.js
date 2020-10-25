@@ -1,7 +1,7 @@
 // camps of model client clientID, dni, name, email, password, phone, date, historic
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-const { exists, findOneAndUpdate } = require("../modules/clients");
+//const { exists, findOneAndUpdate } = require("../modules/clients");
 const SystemModule = require('../modules/system');
 
 
@@ -15,14 +15,15 @@ const logInAdmin = async (req, res) => {
         });
     }else{
         let passwordOk = await bcrypt.compare(req.body.password, admin.password);
+        console.log(passwordOk)
         if(passwordOk){
             if(!admin.token){ // si no existe el campo token (o esta vacio) se asignará
-                let token = jwt.sign(admin.email, process.env.jwt_admin); // firma el pasword y genera el token con el texto del env
+                let token = jwt.sign(admin.email, process.env.jwt_adminToken); // firma el pasword y genera el token con el texto del env
                 admin.token = token; // pasa la firma del password al campo token
                 console.log(token)
                 await SystemModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
-            }
-            
+            }else{};
+
             res.send({
                 token: admin.token,
                 email: admin.email
