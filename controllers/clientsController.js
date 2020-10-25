@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 // const { exists, findOneAndUpdate } = require("../modules/clients");
 const ClientsModule = require('../modules/clients');
 
+
 const showClients = async (req, res) => {
     try {
         const alldates = await ClientsModule.find({});
