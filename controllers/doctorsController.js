@@ -123,11 +123,21 @@ const deleteDoctor = async (req, res) => {
 	});
 };
 
+const showDoctorID = async (req,res)=>{
+    DoctorsModule.findOne({email:req.doctor_email})
+    .then(resp=>{
+        res.send(resp)
+    })
+    .catch(error => console.log('There was a problem trying to show Doctor by Id.' + error))
+}
+
 module.exports = {
     registerDoctor,
     showDoctors,
     showDatesDoctor,
     logInDoctor,
     logOutDoctor,
-    deleteDoctor
+    deleteDoctor,
+    showDoctorID
+
 }

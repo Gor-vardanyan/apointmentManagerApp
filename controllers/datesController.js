@@ -31,9 +31,9 @@ const createDate = async (req,res)=>{
     if( client === null || doctor === null){
         return res.send('Couldnt\'t find either the client or the doctor');
     }
-    let coincidenceFound = await DatesModel.findOne({date:req.body.date, clientID: client._id})
+    let coincidenceFound = await DatesModel.findOne({date:req.body.date, clientID: client._id, status: true})
     if(coincidenceFound !== null){
-        return res.send({message:'This user already has a date, plase send an email for more informatión '});
+        return res.send({message:'This Client already has a date, plase contact your doctor for more informatión '});
     }
     const dates = await new DatesModel({
         doctorID: doctor._id,
@@ -42,7 +42,23 @@ const createDate = async (req,res)=>{
         status: true
     }).save();
 
+    const updateClient = await ClientsModule.findOneAndUpdate({
+        _id: client._id
+    },{
+        $push: { 
+            historic: {
+                doctorID: doctor._id,
+                clientID: client._id,
+                date: req.body.date,
+                status: true
+            }
+        }
+    });
+
     res.send({
+        info:{ doctorID: doctor.name,
+                date: req.body.date
+        },
         message: `Date created successfully for client ${client.name} with doctor: ${doctor.name}.`
     });
 
