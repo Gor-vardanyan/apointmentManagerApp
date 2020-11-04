@@ -1,6 +1,7 @@
 // camps of model doctor doctorID, dni, name, lastname, secondlastname, email, password, phone
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
+const DatesModel = require("../modules/dates");
 const DoctorsModule = require('../modules/doctors');
 const SystemModule = require("../modules/system");
 
@@ -17,9 +18,10 @@ const showDoctors = async (req, res) => {
 };
 
 const showDatesDoctor = async (req, res) => {
-    let dni = req.client_dni;
+    let email = req.doctor_email;
     try {
-        const DatesDoctor = await DoctorsModule.find({ dni });
+        const Doctor = await DoctorsModule.findOne({email})
+        const DatesDoctor = await DatesModel.find({ doctorID:Doctor._id });
         res.send(DatesDoctor)
 } catch (error) {console.log(error)}
 };
@@ -84,9 +86,7 @@ const logInDoctor = async (req, res) => {
             }
             
             res.send({
-                token: doctor.token,
-                name: doctor.name,
-                email: doctor.email
+                doctor
             })
         }else{
             res.send({

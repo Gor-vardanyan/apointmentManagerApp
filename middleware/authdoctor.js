@@ -10,7 +10,7 @@ function authdoctor(req, res, next) {
   jwt.verify(token, process.env.jwt_doctorToken, async (err, token) => {
     if (err) return res.sendStatus(403)
     console.log(`token es : ${token}`);
-    let doctor =  await DoctorsModule.findOne({email:token});
+    let doctor =  await DoctorsModule.findOne({dni:token});
     if(doctor === null || doctor.token === null){
       res.send('El Token no es valido');
     }else{
