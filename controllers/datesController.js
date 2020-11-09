@@ -31,7 +31,7 @@ const createDate = async (req,res)=>{
     if( client === null || doctor === null){
         return res.send('Couldnt\'t find either the client or the doctor');
     }
-    let coincidenceFound = await DatesModel.findOne({date:req.body.date, clientID: client._id, status: true})
+    let coincidenceFound = await DatesModel.findOne({clientID: client._id, status: true})
     if(coincidenceFound !== null){
         return res.send({message:'This Client already has a date, plase contact your doctor for more informatión '});
     }
@@ -55,10 +55,13 @@ const createDate = async (req,res)=>{
         }
     });
 
+    client = await ClientsModule.findOne({_id: client._id});
+
     res.send({
         info:{ doctorID: doctor.name,
                 date: req.body.date
         },
+        user:client,
         message: `Date created successfully for client ${client.name} with doctor: ${doctor.name}.`
     });
 
@@ -74,12 +77,25 @@ const removeDateClient = async (req,res)=>{
     if( !(client === null) ){
         const date = await DatesModel.findOneAndDelete({
             clientID: client._id,
+            status:true
         })
+
+        let historico = [];
+        client.historic.forEach((item,nodo)=>{
+            if(item.status != true){
+                historico.push(item)
+            }
+        })
+        await ClientsModule.findOneAndUpdate({
+            _id:client._id
+        },{$set:{historic:historico}})
+        client = await ClientsModule.findOne({dni:req.client_dni});
         res.send({
-            message: `Date deleted successfully for Client ${client.dni} in date: ${date.date}.`
+            message: `Date deleted successfully for Client ${client.dni} in date: ${date.date}.`,
+            user:client
         });
     }
-    res.send('Couldnt\'t find either the client');
+    res.send({message:'Couldnt\'t find either the client'});
 };
 
 

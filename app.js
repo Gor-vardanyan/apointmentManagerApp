@@ -36,6 +36,7 @@ const {deleteClient} = require('./controllers/clientsController');
 const {logInClient} = require('./controllers/clientsController');
 const {logOutClient} = require('./controllers/clientsController');
 const {showDatesClient} = require('./controllers/clientsController');
+
     //////////////////
 
     ////// Routing Doctor /////
@@ -67,6 +68,7 @@ app.post( '/client/logInClient', logInClient); //only asks for email and pasword
 app.post( '/client/logOutClient', auth, logOutClient); //only needs to be loged for it's token
 app.post( '/client/delete', auth, deleteClient); // search through dni and deletes, requires token from Client
 app.post('/client/dates',auth, showDatesClient)// searches in dates his id
+
     //////////////////
 
     ////// CRUD Doctor //////

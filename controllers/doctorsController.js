@@ -10,8 +10,8 @@ const showDoctors = async (req, res) => {
     let admin = req.admin_email;
     try {
         if( admin !== null){
-            const alldates = await DoctorsModule.find({});
-            res.send(alldates)
+            const allDoctors = await DoctorsModule.find({},'_id name email dni phone');
+            res.send(allDoctors)
         }
     } catch (error) {
         console.log(error)};
@@ -28,8 +28,8 @@ const showDatesDoctor = async (req, res) => {
 
 const registerDoctor = async (req, res) => {
     let admin_email = req.admin_email;
-    var bodyDatadoctor = req.body;
-    let hashed_password = await bcrypt.hash(bodyDatadoctor.password, 10);
+    let bodyDatadoctor = req.body;
+    let hashed_password = await bcrypt.hash(bodyDatadoctor.pass, 10);
     let query = req.body;
     let admin = await DoctorsModule.findOne({query})
 
@@ -43,15 +43,16 @@ const registerDoctor = async (req, res) => {
                         password: hashed_password,
                         phone: bodyDatadoctor.phone
                     }).save();
-
-                    res.send({
-                        message: "Doctor added successfully.",
-                        dni: doctors.dni,
-                        name: doctors.name,
-                        email: doctors.email,
-                        password: doctors.password,
-                        phone: doctors.phone
-                    });
+                    let doctor = {
+                        _id:doctors._id,
+                        dni:doctors.dni,
+                        name:doctors.name,
+                        email:doctors.email,
+                        phone:doctors.phone
+                    }
+                    res.send(
+                        doctor
+                    );
                 }else{res.send({error: "login with admin"});};
             }
         } catch (err) {

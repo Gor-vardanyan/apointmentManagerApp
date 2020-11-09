@@ -25,8 +25,7 @@ const logInAdmin = async (req, res) => {
             }else{};
 
             res.send({
-                token: admin.token,
-                email: admin.email
+                admin
             })
         }else{
             res.send({
