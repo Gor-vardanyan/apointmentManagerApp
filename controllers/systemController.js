@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 //const { exists, findOneAndUpdate } = require("../modules/clients");
 const SystemModule = require('../modules/system');
 
-
 const logInAdmin = async (req, res) => {
     let query = {email: req.body.email}
     let admin = await SystemModule.findOne(query);
