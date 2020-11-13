@@ -77,7 +77,7 @@ const deleteClient = async (req, res) => {
 };
 
 const logInClient = async (req, res) => {
-    let bodyy = JSON.parse(req.body);
+    let body = JSON.parse(req.body);
     let query = {email: body.email}
     let client = await ClientsModule.findOne(query);
 
