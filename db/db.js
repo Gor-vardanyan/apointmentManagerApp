@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const mongoUri = process.env.uri || 'mongodb://localhost:27017/heroku-mongo'
-mongoose.connect(mongoUri, {
+mongoose.connect(process.env.uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
