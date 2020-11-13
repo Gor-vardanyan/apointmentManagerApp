@@ -23,7 +23,7 @@ app.use(express.json());
 
 //testear conexion
 app.post('/live',auth,(req,res)=>{
-    res.send('hello');
+    res.send(process.env);
 });
 
 app.get('/live',(req,res)=>{
