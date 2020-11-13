@@ -8,10 +8,9 @@ const {authdoctor} = require('./middleware/authdoctor');
 const {authadmin} = require('./middleware/authadmin');
 const {tokenCheck} = require('./middleware/tokenchek');
 
-
 PORT = process.env.PORT || 5000;
 
-app.use((req, res, next) => {
+app.all((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT,OPTIONS, DELETE");
@@ -26,7 +25,8 @@ app.post('/live',auth,(req,res)=>{
 });
 
 app.get('/live',(req,res)=>{
-    res.send('hello');
+    console.log(process.env);
+    res.send(process.env);
 });
     ////// Routing Client /////
 const {showClientId} = require('./controllers/clientsController');
