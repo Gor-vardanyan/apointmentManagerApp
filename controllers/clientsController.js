@@ -21,7 +21,7 @@ const showDatesClient = async (req, res) => {
 };
 
 const registerClients = async (req, res) => {
-    let bodyData = req.body;
+    let bodyData = JSON.parse(req.body);
     let hashed_password = await bcrypt.hash(bodyData.password, 10);
     try {
         const clients = await new ClientsModule({
