@@ -28,7 +28,7 @@ const showDatesDoctor = async (req, res) => {
 
 const registerDoctor = async (req, res) => {
     let admin_email = req.admin_email;
-    let bodyDatadoctor = req.body;
+    let bodyDatadoctor = JSON.parse(req.body);
     let hashed_password = await bcrypt.hash(bodyDatadoctor.pass, 10);
     let query = req.body;
     let admin = await DoctorsModule.findOne({query})
