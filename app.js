@@ -11,8 +11,8 @@ const {tokenCheck} = require('./middleware/tokenchek');
 PORT = process.env.PORT || 5000;
 
 app.all((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://dental-clinic-appointment.herokuapp.com/,http://localhost:3000,http://localhost:5000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Origin", "https://dental-clinic-appointment.herokuapp.com,http://localhost:3000,http://localhost:5000"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT,OPTIONS, DELETE");
     next();
   });
