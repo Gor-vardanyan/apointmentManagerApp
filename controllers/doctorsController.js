@@ -91,7 +91,7 @@ const logInDoctor = async (req, res) => {
             })
         }else{
             res.send({
-                message: process.env
+                message: "Credenciales incorrectas"
             })
         }   
     }
