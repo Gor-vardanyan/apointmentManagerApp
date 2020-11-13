@@ -81,7 +81,7 @@ const logInDoctor = async (req, res) => {
         if(passwordOk){
             //here we create the token or asign it
             if(!doctor.token){ 
-                let token = jwt.sign(doctor.dni, process.env.jwt_doctorToken); // firma el pasword y genera el token con el texto del env
+                let token = jwt.sign(doctor.dni, 'auth_doctor'); // firma el pasword y genera el token con el texto del env
                 doctor.token = token; // pasa la firma del password al campo token
                 await DoctorsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion doctor
             }

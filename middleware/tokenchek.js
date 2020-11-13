@@ -10,7 +10,7 @@ function tokenCheck(req, res, next) {
 
   if (token == null) return res.sendStatus(401) // if there isn't any token
   
-  jwt.verify(token, process.env.jwt_doctorToken, async (err, token) => {
+  jwt.verify(token, 'auth_doctor', async (err, token) => {
     //if (err) res.sendStatus(403) 
     let doctor =  await DoctorsModule.findOne({email:token});
     if(doctor !== null){
@@ -19,7 +19,7 @@ function tokenCheck(req, res, next) {
         next();
     }
   })
-  jwt.verify(token, process.env.jwt_encoder, async (err, token) => {
+  jwt.verify(token, 'first_project_mongo', async (err, token) => {
     //if (err) return res.sendStatus(403)
     let client = await ClientsModule.findOne({dni:token});
     if(client !== null ){

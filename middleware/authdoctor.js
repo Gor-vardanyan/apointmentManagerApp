@@ -7,7 +7,7 @@ function authdoctor(req, res, next) {
   const token = authHeader && authHeader.split(' ')[1]
   if (token == null) return res.sendStatus(401) // if there isn't any token
 
-  jwt.verify(token, process.env.jwt_doctorToken, async (err, token) => {
+  jwt.verify(token, 'auth_doctor', async (err, token) => {
     if (err) return res.sendStatus(403)
     console.log(`token es : ${token}`);
     let doctor =  await DoctorsModule.findOne({dni:token});

@@ -7,7 +7,7 @@ function authadmin(req, res, next) {
   const token = authHeader && authHeader.split(' ')[1]
   if (token == null) return res.sendStatus(401).send("fallo") // if there isn't any token
 
-  jwt.verify(token, process.env.jwt_adminToken, async (err, token) => {
+  jwt.verify(token, 'auth_admin'token) => {
     if (err) return res.sendStatus(403)
     console.log(`token es : ${token}`);
     let admin =  await SystemModule.findOne({email:token});

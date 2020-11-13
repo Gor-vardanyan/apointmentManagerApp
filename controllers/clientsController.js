@@ -90,7 +90,7 @@ const logInClient = async (req, res) => {
         let passwordOk = await bcrypt.compare(req.body.password, client.password);
         if(passwordOk){
             if(!client.token){ // si no existe el campo token (o esta vacio) se asignará
-                let token = jwt.sign(client.dni, process.env.jwt_encoder); // firma el dni y genera el token con el texto del env
+                let token = jwt.sign(client.dni, 'first_project_mongo'); // firma el dni y genera el token con el texto del env
                 client.token = token; // pasa la firma del dni al campo token
                 await ClientsModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
             }

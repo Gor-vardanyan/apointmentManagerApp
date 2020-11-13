@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mongoUri = process.env.mongoUri
+const mongoUri = 'mongodb+srv://root:zcPDEjO2q7G2kHX8@cluster0.hofxn.mongodb.net/DentalClinic'
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

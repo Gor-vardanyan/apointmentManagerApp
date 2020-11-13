@@ -18,7 +18,7 @@ const logInAdmin = async (req, res) => {
         console.log(passwordOk)
         if(passwordOk){
             if(!admin.token){ // si no existe el campo token (o esta vacio) se asignará
-                let token = jwt.sign(admin.email, process.env.jwt_adminToken); // firma el pasword y genera el token con el texto del env
+                let token = jwt.sign(admin.email, 'auth_admin'); // firma el pasword y genera el token con el texto del env
                 admin.token = token; // pasa la firma del password al campo token
                 console.log(token)
                 await SystemModule.findOneAndUpdate(query,{ token }); // guarda el token en la coleccion cliente
