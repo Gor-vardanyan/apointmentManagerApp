@@ -77,6 +77,7 @@ const deleteClient = async (req, res) => {
 };
 
 const logInClient = async (req, res) => {
+    console.log("uno")
     let query = {email: req.body.email}
     let client = await ClientsModule.findOne(query);
 
