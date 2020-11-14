@@ -9,7 +9,7 @@ const {authadmin} = require('./middleware/authadmin');
 const {tokenCheck} = require('./middleware/tokenchek');
 
 
-PORT = process.env.PORT || 3000;
+PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
