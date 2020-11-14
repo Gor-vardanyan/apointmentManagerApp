@@ -8,28 +8,27 @@ const {authdoctor} = require('./middleware/authdoctor');
 const {authadmin} = require('./middleware/authadmin');
 const {tokenCheck} = require('./middleware/tokenchek');
 
-PORT = process.env.PORT || 5000;
+
+PORT = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT,OPTIONS, DELETE");
     next();
-});
-
+  });
 //El json lo parseamos mediante express para su uso
 app.use(express.json());
 
 //testear conexion
 app.post('/live',auth,(req,res)=>{
-    res.send(process.env);
+    res.send('hello');
 });
 
 app.get('/live',(req,res)=>{
-    console.log(process.env);
-    res.send(process.env);
+    res.send('hello');
 });
+
     ////// Routing Client /////
 const {showClientId} = require('./controllers/clientsController');
 const {showClients} = require('./controllers/clientsController');
